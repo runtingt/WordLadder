@@ -1,6 +1,7 @@
 import numpy as np
 from collections import defaultdict, deque
 from pyvis.network import Network
+import toml
 
 # Get the dictionary
 with open("dict.txt") as input_file:
@@ -81,9 +82,7 @@ def get_paths(begin_word, end_word, word_list, shortest):
         path_okay = True
         target = np.array([char for char in end_word])
         for index, word in enumerate(path):
-            if (len(target) 
-                - np.sum(np.array([char for char in word] == target)) 
-                > shortest-index-1):
+            if (len(target) - np.sum(np.array([char for char in word] == target)) > shortest-index-1):
                 path_okay = False
         
         if len(path) <= shortest and path_okay:
@@ -105,10 +104,12 @@ def get_paths(begin_word, end_word, word_list, shortest):
 
 
 def solve(start, target):
+    start = start.lower().strip()
+    target = target.lower().strip()
     # Get a shortest path, use this to find all other shortest paths
     try:
         score, path = ladder_length(start, target, word_list) 
-        paths = get_paths("hide", "eggs", word_list, score)
+        paths = get_paths(start, target, word_list, score)
     except TypeError:
         print("No solution found")
     

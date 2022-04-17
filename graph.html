@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 100%;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "red", "id": "grow", "label": "grow", "shape": "dot"}, {"color": "green", "id": "dive", "label": "dive", "shape": "dot"}, {"color": "pink", "id": "bite", "label": "bite", "shape": "dot"}, {"color": "pink", "id": "dits", "label": "dits", "shape": "dot"}, {"color": "pink", "id": "bios", "label": "bios", "shape": "dot"}, {"color": "pink", "id": "dite", "label": "dite", "shape": "dot"}, {"color": "pink", "id": "bins", "label": "bins", "shape": "dot"}, {"color": "pink", "id": "dine", "label": "dine", "shape": "dot"}, {"color": "pink", "id": "brow", "label": "brow", "shape": "dot"}, {"color": "pink", "id": "bits", "label": "bits", "shape": "dot"}, {"color": "pink", "id": "bine", "label": "bine", "shape": "dot"}, {"color": "pink", "id": "dins", "label": "dins", "shape": "dot"}, {"color": "pink", "id": "bros", "label": "bros", "shape": "dot"}, {"id": "cite", "label": "cite", "shape": "dot"}, {"id": "gite", "label": "gite", "shape": "dot"}, {"id": "kite", "label": "kite", "shape": "dot"}, {"id": "lite", "label": "lite", "shape": "dot"}, {"id": "mite", "label": "mite", "shape": "dot"}, {"id": "nite", "label": "nite", "shape": "dot"}, {"id": "rite", "label": "rite", "shape": "dot"}, {"id": "site", "label": "site", "shape": "dot"}, {"id": "wite", "label": "wite", "shape": "dot"}, {"id": "bate", "label": "bate", "shape": "dot"}, {"id": "bute", "label": "bute", "shape": "dot"}, {"id": "byte", "label": "byte", "shape": "dot"}, {"id": "bice", "label": "bice", "shape": "dot"}, {"id": "bide", "label": "bide", "shape": "dot"}, {"id": "bike", "label": "bike", "shape": "dot"}, {"id": "bile", "label": "bile", "shape": "dot"}, {"id": "bise", "label": "bise", "shape": "dot"}, {"id": "bize", "label": "bize", "shape": "dot"}, {"id": "bitt", "label": "bitt", "shape": "dot"}, {"id": "aits", "label": "aits", "shape": "dot"}, {"id": "fits", "label": "fits", "shape": "dot"}, {"id": "gits", "label": "gits", "shape": "dot"}, {"id": "hits", "label": "hits", "shape": "dot"}, {"id": "kits", "label": "kits", "shape": "dot"}, {"id": "lits", "label": "lits", "shape": "dot"}, {"id": "nits", "label": "nits", "shape": "dot"}, {"id": "pits", "label": "pits", "shape": "dot"}, {"id": "sits", "label": "sits", "shape": "dot"}, {"id": "tits", "label": "tits", "shape": "dot"}, {"id": "wits", "label": "wits", "shape": "dot"}, {"id": "zits", "label": "zits", "shape": "dot"}, {"id": "dots", "label": "dots", "shape": "dot"}, {"id": "dibs", "label": "dibs", "shape": "dot"}, {"id": "dies", "label": "dies", "shape": "dot"}, {"id": "difs", "label": "difs", "shape": "dot"}, {"id": "digs", "label": "digs", "shape": "dot"}, {"id": "dims", "label": "dims", "shape": "dot"}, {"id": "dips", "label": "dips", "shape": "dot"}, {"id": "diss", "label": "diss", "shape": "dot"}, {"id": "dita", "label": "dita", "shape": "dot"}, {"id": "ditz", "label": "ditz", "shape": "dot"}, {"id": "boos", "label": "boos", "shape": "dot"}, {"id": "bias", "label": "bias", "shape": "dot"}, {"id": "bibs", "label": "bibs", "shape": "dot"}, {"id": "bids", "label": "bids", "shape": "dot"}, {"id": "bigs", "label": "bigs", "shape": "dot"}, {"id": "biog", "label": "biog", "shape": "dot"}, {"id": "date", "label": "date", "shape": "dot"}, {"id": "dote", "label": "dote", "shape": "dot"}, {"id": "dice", "label": "dice", "shape": "dot"}, {"id": "dike", "label": "dike", "shape": "dot"}, {"id": "dime", "label": "dime", "shape": "dot"}, {"id": "dire", "label": "dire", "shape": "dot"}, {"id": "ains", "label": "ains", "shape": "dot"}, {"id": "fins", "label": "fins", "shape": "dot"}, {"id": "gins", "label": "gins", "shape": "dot"}, {"id": "hins", "label": "hins", "shape": "dot"}, {"id": "jins", "label": "jins", "shape": "dot"}, {"id": "kins", "label": "kins", "shape": "dot"}, {"id": "lins", "label": "lins", "shape": "dot"}, {"id": "pins", "label": "pins", "shape": "dot"}, {"id": "rins", "label": "rins", "shape": "dot"}, {"id": "sins", "label": "sins", "shape": "dot"}, {"id": "tins", "label": "tins", "shape": "dot"}, {"id": "wins", "label": "wins", "shape": "dot"}, {"id": "yins", "label": "yins", "shape": "dot"}, {"id": "zins", "label": "zins", "shape": "dot"}, {"id": "bans", "label": "bans", "shape": "dot"}, {"id": "bens", "label": "bens", "shape": "dot"}, {"id": "buns", "label": "buns", "shape": "dot"}, {"id": "bind", "label": "bind", "shape": "dot"}, {"id": "bint", "label": "bint", "shape": "dot"}, {"id": "cine", "label": "cine", "shape": "dot"}, {"id": "fine", "label": "fine", "shape": "dot"}, {"id": "kine", "label": "kine", "shape": "dot"}, {"id": "line", "label": "line", "shape": "dot"}, {"id": "mine", "label": "mine", "shape": "dot"}, {"id": "nine", "label": "nine", "shape": "dot"}, {"id": "pine", "label": "pine", "shape": "dot"}, {"id": "sine", "label": "sine", "shape": "dot"}, {"id": "tine", "label": "tine", "shape": "dot"}, {"id": "vine", "label": "vine", "shape": "dot"}, {"id": "wine", "label": "wine", "shape": "dot"}, {"id": "zine", "label": "zine", "shape": "dot"}, {"id": "dene", "label": "dene", "shape": "dot"}, {"id": "done", "label": "done", "shape": "dot"}, {"id": "dune", "label": "dune", "shape": "dot"}, {"id": "dyne", "label": "dyne", "shape": "dot"}, {"id": "ding", "label": "ding", "shape": "dot"}, {"id": "dink", "label": "dink", "shape": "dot"}, {"id": "dino", "label": "dino", "shape": "dot"}, {"id": "dint", "label": "dint", "shape": "dot"}, {"id": "crow", "label": "crow", "shape": "dot"}, {"id": "frow", "label": "frow", "shape": "dot"}, {"id": "prow", "label": "prow", "shape": "dot"}, {"id": "trow", "label": "trow", "shape": "dot"}, {"id": "vrow", "label": "vrow", "shape": "dot"}, {"id": "blow", "label": "blow", "shape": "dot"}, {"id": "braw", "label": "braw", "shape": "dot"}, {"id": "brew", "label": "brew", "shape": "dot"}, {"id": "broo", "label": "broo", "shape": "dot"}, {"id": "bats", "label": "bats", "shape": "dot"}, {"id": "bets", "label": "bets", "shape": "dot"}, {"id": "bots", "label": "bots", "shape": "dot"}, {"id": "buts", "label": "buts", "shape": "dot"}, {"id": "bane", "label": "bane", "shape": "dot"}, {"id": "bene", "label": "bene", "shape": "dot"}, {"id": "bone", "label": "bone", "shape": "dot"}, {"id": "dans", "label": "dans", "shape": "dot"}, {"id": "dens", "label": "dens", "shape": "dot"}, {"id": "dons", "label": "dons", "shape": "dot"}, {"id": "duns", "label": "duns", "shape": "dot"}, {"id": "glow", "label": "glow", "shape": "dot"}, {"id": "grew", "label": "grew", "shape": "dot"}, {"id": "grog", "label": "grog", "shape": "dot"}, {"id": "grok", "label": "grok", "shape": "dot"}, {"id": "grot", "label": "grot", "shape": "dot"}, {"id": "five", "label": "five", "shape": "dot"}, {"id": "give", "label": "give", "shape": "dot"}, {"id": "hive", "label": "hive", "shape": "dot"}, {"id": "jive", "label": "jive", "shape": "dot"}, {"id": "live", "label": "live", "shape": "dot"}, {"id": "rive", "label": "rive", "shape": "dot"}, {"id": "vive", "label": "vive", "shape": "dot"}, {"id": "wive", "label": "wive", "shape": "dot"}, {"id": "dove", "label": "dove", "shape": "dot"}, {"id": "diva", "label": "diva", "shape": "dot"}, {"id": "eros", "label": "eros", "shape": "dot"}, {"id": "pros", "label": "pros", "shape": "dot"}, {"id": "bras", "label": "bras", "shape": "dot"}, {"id": "bris", "label": "bris", "shape": "dot"}]);
+        edges = new vis.DataSet([{"color": "black", "from": "bite", "to": "cite"}, {"color": "pink", "from": "bite", "to": "dite"}, {"color": "black", "from": "bite", "to": "gite"}, {"color": "black", "from": "bite", "to": "kite"}, {"color": "black", "from": "bite", "to": "lite"}, {"color": "black", "from": "bite", "to": "mite"}, {"color": "black", "from": "bite", "to": "nite"}, {"color": "black", "from": "bite", "to": "rite"}, {"color": "black", "from": "bite", "to": "site"}, {"color": "black", "from": "bite", "to": "wite"}, {"color": "black", "from": "bite", "to": "bate"}, {"color": "black", "from": "bite", "to": "bute"}, {"color": "black", "from": "bite", "to": "byte"}, {"color": "black", "from": "bite", "to": "bice"}, {"color": "black", "from": "bite", "to": "bide"}, {"color": "black", "from": "bite", "to": "bike"}, {"color": "black", "from": "bite", "to": "bile"}, {"color": "pink", "from": "bite", "to": "bine"}, {"color": "black", "from": "bite", "to": "bise"}, {"color": "black", "from": "bite", "to": "bize"}, {"color": "pink", "from": "bite", "to": "bits"}, {"color": "black", "from": "bite", "to": "bitt"}, {"color": "black", "from": "dits", "to": "aits"}, {"color": "pink", "from": "dits", "to": "bits"}, {"color": "black", "from": "dits", "to": "fits"}, {"color": "black", "from": "dits", "to": "gits"}, {"color": "black", "from": "dits", "to": "hits"}, {"color": "black", "from": "dits", "to": "kits"}, {"color": "black", "from": "dits", "to": "lits"}, {"color": "black", "from": "dits", "to": "nits"}, {"color": "black", "from": "dits", "to": "pits"}, {"color": "black", "from": "dits", "to": "sits"}, {"color": "black", "from": "dits", "to": "tits"}, {"color": "black", "from": "dits", "to": "wits"}, {"color": "black", "from": "dits", "to": "zits"}, {"color": "black", "from": "dits", "to": "dots"}, {"color": "black", "from": "dits", "to": "dibs"}, {"color": "black", "from": "dits", "to": "dies"}, {"color": "black", "from": "dits", "to": "difs"}, {"color": "black", "from": "dits", "to": "digs"}, {"color": "black", "from": "dits", "to": "dims"}, {"color": "pink", "from": "dits", "to": "dins"}, {"color": "black", "from": "dits", "to": "dips"}, {"color": "black", "from": "dits", "to": "diss"}, {"color": "black", "from": "dits", "to": "dita"}, {"color": "pink", "from": "dits", "to": "dite"}, {"color": "black", "from": "dits", "to": "ditz"}, {"color": "black", "from": "bios", "to": "boos"}, {"color": "pink", "from": "bios", "to": "bros"}, {"color": "black", "from": "bios", "to": "bias"}, {"color": "black", "from": "bios", "to": "bibs"}, {"color": "black", "from": "bios", "to": "bids"}, {"color": "black", "from": "bios", "to": "bigs"}, {"color": "pink", "from": "bios", "to": "bins"}, {"color": "pink", "from": "bios", "to": "bits"}, {"color": "black", "from": "bios", "to": "biog"}, {"color": "black", "from": "dite", "to": "cite"}, {"color": "black", "from": "dite", "to": "gite"}, {"color": "black", "from": "dite", "to": "kite"}, {"color": "black", "from": "dite", "to": "lite"}, {"color": "black", "from": "dite", "to": "mite"}, {"color": "black", "from": "dite", "to": "nite"}, {"color": "black", "from": "dite", "to": "rite"}, {"color": "black", "from": "dite", "to": "site"}, {"color": "black", "from": "dite", "to": "wite"}, {"color": "black", "from": "dite", "to": "date"}, {"color": "black", "from": "dite", "to": "dote"}, {"color": "black", "from": "dite", "to": "dice"}, {"color": "black", "from": "dite", "to": "dike"}, {"color": "black", "from": "dite", "to": "dime"}, {"color": "pink", "from": "dite", "to": "dine"}, {"color": "black", "from": "dite", "to": "dire"}, {"color": "pink", "from": "dite", "to": "dive"}, {"color": "black", "from": "dite", "to": "dita"}, {"color": "black", "from": "dite", "to": "ditz"}, {"color": "black", "from": "bins", "to": "ains"}, {"color": "pink", "from": "bins", "to": "dins"}, {"color": "black", "from": "bins", "to": "fins"}, {"color": "black", "from": "bins", "to": "gins"}, {"color": "black", "from": "bins", "to": "hins"}, {"color": "black", "from": "bins", "to": "jins"}, {"color": "black", "from": "bins", "to": "kins"}, {"color": "black", "from": "bins", "to": "lins"}, {"color": "black", "from": "bins", "to": "pins"}, {"color": "black", "from": "bins", "to": "rins"}, {"color": "black", "from": "bins", "to": "sins"}, {"color": "black", "from": "bins", "to": "tins"}, {"color": "black", "from": "bins", "to": "wins"}, {"color": "black", "from": "bins", "to": "yins"}, {"color": "black", "from": "bins", "to": "zins"}, {"color": "black", "from": "bins", "to": "bans"}, {"color": "black", "from": "bins", "to": "bens"}, {"color": "black", "from": "bins", "to": "buns"}, {"color": "black", "from": "bins", "to": "bias"}, {"color": "black", "from": "bins", "to": "bibs"}, {"color": "black", "from": "bins", "to": "bids"}, {"color": "black", "from": "bins", "to": "bigs"}, {"color": "pink", "from": "bins", "to": "bits"}, {"color": "black", "from": "bins", "to": "bind"}, {"color": "pink", "from": "bins", "to": "bine"}, {"color": "black", "from": "bins", "to": "bint"}, {"color": "pink", "from": "dine", "to": "bine"}, {"color": "black", "from": "dine", "to": "cine"}, {"color": "black", "from": "dine", "to": "fine"}, {"color": "black", "from": "dine", "to": "kine"}, {"color": "black", "from": "dine", "to": "line"}, {"color": "black", "from": "dine", "to": "mine"}, {"color": "black", "from": "dine", "to": "nine"}, {"color": "black", "from": "dine", "to": "pine"}, {"color": "black", "from": "dine", "to": "sine"}, {"color": "black", "from": "dine", "to": "tine"}, {"color": "black", "from": "dine", "to": "vine"}, {"color": "black", "from": "dine", "to": "wine"}, {"color": "black", "from": "dine", "to": "zine"}, {"color": "black", "from": "dine", "to": "dene"}, {"color": "black", "from": "dine", "to": "done"}, {"color": "black", "from": "dine", "to": "dune"}, {"color": "black", "from": "dine", "to": "dyne"}, {"color": "black", "from": "dine", "to": "dice"}, {"color": "black", "from": "dine", "to": "dike"}, {"color": "black", "from": "dine", "to": "dime"}, {"color": "black", "from": "dine", "to": "dire"}, {"color": "pink", "from": "dine", "to": "dive"}, {"color": "black", "from": "dine", "to": "ding"}, {"color": "black", "from": "dine", "to": "dink"}, {"color": "black", "from": "dine", "to": "dino"}, {"color": "pink", "from": "dine", "to": "dins"}, {"color": "black", "from": "dine", "to": "dint"}, {"color": "black", "from": "brow", "to": "crow"}, {"color": "black", "from": "brow", "to": "frow"}, {"color": "pink", "from": "brow", "to": "grow"}, {"color": "black", "from": "brow", "to": "prow"}, {"color": "black", "from": "brow", "to": "trow"}, {"color": "black", "from": "brow", "to": "vrow"}, {"color": "black", "from": "brow", "to": "blow"}, {"color": "black", "from": "brow", "to": "braw"}, {"color": "black", "from": "brow", "to": "brew"}, {"color": "black", "from": "brow", "to": "broo"}, {"color": "pink", "from": "brow", "to": "bros"}, {"color": "black", "from": "bits", "to": "aits"}, {"color": "black", "from": "bits", "to": "fits"}, {"color": "black", "from": "bits", "to": "gits"}, {"color": "black", "from": "bits", "to": "hits"}, {"color": "black", "from": "bits", "to": "kits"}, {"color": "black", "from": "bits", "to": "lits"}, {"color": "black", "from": "bits", "to": "nits"}, {"color": "black", "from": "bits", "to": "pits"}, {"color": "black", "from": "bits", "to": "sits"}, {"color": "black", "from": "bits", "to": "tits"}, {"color": "black", "from": "bits", "to": "wits"}, {"color": "black", "from": "bits", "to": "zits"}, {"color": "black", "from": "bits", "to": "bats"}, {"color": "black", "from": "bits", "to": "bets"}, {"color": "black", "from": "bits", "to": "bots"}, {"color": "black", "from": "bits", "to": "buts"}, {"color": "black", "from": "bits", "to": "bias"}, {"color": "black", "from": "bits", "to": "bibs"}, {"color": "black", "from": "bits", "to": "bids"}, {"color": "black", "from": "bits", "to": "bigs"}, {"color": "black", "from": "bits", "to": "bitt"}, {"color": "black", "from": "bine", "to": "cine"}, {"color": "black", "from": "bine", "to": "fine"}, {"color": "black", "from": "bine", "to": "kine"}, {"color": "black", "from": "bine", "to": "line"}, {"color": "black", "from": "bine", "to": "mine"}, {"color": "black", "from": "bine", "to": "nine"}, {"color": "black", "from": "bine", "to": "pine"}, {"color": "black", "from": "bine", "to": "sine"}, {"color": "black", "from": "bine", "to": "tine"}, {"color": "black", "from": "bine", "to": "vine"}, {"color": "black", "from": "bine", "to": "wine"}, {"color": "black", "from": "bine", "to": "zine"}, {"color": "black", "from": "bine", "to": "bane"}, {"color": "black", "from": "bine", "to": "bene"}, {"color": "black", "from": "bine", "to": "bone"}, {"color": "black", "from": "bine", "to": "bice"}, {"color": "black", "from": "bine", "to": "bide"}, {"color": "black", "from": "bine", "to": "bike"}, {"color": "black", "from": "bine", "to": "bile"}, {"color": "black", "from": "bine", "to": "bise"}, {"color": "black", "from": "bine", "to": "bize"}, {"color": "black", "from": "bine", "to": "bind"}, {"color": "black", "from": "bine", "to": "bint"}, {"color": "black", "from": "dins", "to": "ains"}, {"color": "black", "from": "dins", "to": "fins"}, {"color": "black", "from": "dins", "to": "gins"}, {"color": "black", "from": "dins", "to": "hins"}, {"color": "black", "from": "dins", "to": "jins"}, {"color": "black", "from": "dins", "to": "kins"}, {"color": "black", "from": "dins", "to": "lins"}, {"color": "black", "from": "dins", "to": "pins"}, {"color": "black", "from": "dins", "to": "rins"}, {"color": "black", "from": "dins", "to": "sins"}, {"color": "black", "from": "dins", "to": "tins"}, {"color": "black", "from": "dins", "to": "wins"}, {"color": "black", "from": "dins", "to": "yins"}, {"color": "black", "from": "dins", "to": "zins"}, {"color": "black", "from": "dins", "to": "dans"}, {"color": "black", "from": "dins", "to": "dens"}, {"color": "black", "from": "dins", "to": "dons"}, {"color": "black", "from": "dins", "to": "duns"}, {"color": "black", "from": "dins", "to": "dibs"}, {"color": "black", "from": "dins", "to": "dies"}, {"color": "black", "from": "dins", "to": "difs"}, {"color": "black", "from": "dins", "to": "digs"}, {"color": "black", "from": "dins", "to": "dims"}, {"color": "black", "from": "dins", "to": "dips"}, {"color": "black", "from": "dins", "to": "diss"}, {"color": "black", "from": "dins", "to": "ding"}, {"color": "black", "from": "dins", "to": "dink"}, {"color": "black", "from": "dins", "to": "dino"}, {"color": "black", "from": "dins", "to": "dint"}, {"color": "black", "from": "grow", "to": "crow"}, {"color": "black", "from": "grow", "to": "frow"}, {"color": "black", "from": "grow", "to": "prow"}, {"color": "black", "from": "grow", "to": "trow"}, {"color": "black", "from": "grow", "to": "vrow"}, {"color": "black", "from": "grow", "to": "glow"}, {"color": "black", "from": "grow", "to": "grew"}, {"color": "black", "from": "grow", "to": "grog"}, {"color": "black", "from": "grow", "to": "grok"}, {"color": "black", "from": "grow", "to": "grot"}, {"color": "black", "from": "dive", "to": "five"}, {"color": "black", "from": "dive", "to": "give"}, {"color": "black", "from": "dive", "to": "hive"}, {"color": "black", "from": "dive", "to": "jive"}, {"color": "black", "from": "dive", "to": "live"}, {"color": "black", "from": "dive", "to": "rive"}, {"color": "black", "from": "dive", "to": "vive"}, {"color": "black", "from": "dive", "to": "wive"}, {"color": "black", "from": "dive", "to": "dove"}, {"color": "black", "from": "dive", "to": "dice"}, {"color": "black", "from": "dive", "to": "dike"}, {"color": "black", "from": "dive", "to": "dime"}, {"color": "black", "from": "dive", "to": "dire"}, {"color": "black", "from": "dive", "to": "diva"}, {"color": "black", "from": "bros", "to": "eros"}, {"color": "black", "from": "bros", "to": "pros"}, {"color": "black", "from": "bros", "to": "boos"}, {"color": "black", "from": "bros", "to": "bras"}, {"color": "black", "from": "bros", "to": "bris"}, {"color": "black", "from": "bros", "to": "broo"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
