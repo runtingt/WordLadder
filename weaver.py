@@ -1,7 +1,6 @@
 import numpy as np
 from collections import defaultdict, deque
 from pyvis.network import Network
-import toml
 
 # Get the dictionary
 with open("dict.txt") as input_file:
